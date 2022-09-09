@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use App\Http\Resources\ProductResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ChildrenResource extends JsonResource
@@ -17,7 +16,6 @@ class ChildrenResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'parent_id' => $this->parent_id,
             'name' => $this->name,
             'product' => ProductResource::collection($this->products)
         ];

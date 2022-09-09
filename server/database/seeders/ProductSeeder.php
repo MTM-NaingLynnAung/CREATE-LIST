@@ -19,22 +19,23 @@ class ProductSeeder extends Seeder
         [
             'name' => 'Product1',
             'price' => 1000,
-            'description' => 'Product is for testing'
+            'description' => 'Product is for testing',
+            'created_at' => now(),
+            'updated_at' => now()
         ],[
             'name' => 'Product2',
             'price' => 2000,
-            'description' => 'Product is for testing'
+            'description' => 'Product is for testing',
+            'created_at' => now(),
+            'updated_at' => now()
         ],[
             'name' => 'Product3',
             'price' => 3000,
-            'description' => 'Product is for testing'
-        ],[
-            'name' => 'Product4',
-            'price' => 4000,
-            'description' => 'Product is for testing'
+            'description' => 'Product is for testing',
+            'created_at' => now(),
+            'updated_at' => now()
         ]];
-        foreach($products as $product){
-            Product::create($product);
-        }
+        Product::insert($products);
+        
     }
 }

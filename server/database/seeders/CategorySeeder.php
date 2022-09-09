@@ -19,18 +19,23 @@ class CategorySeeder extends Seeder
         [
             'parent_id' => 1,
             'name' => 'Electronics',
+            'created_at' => now(),
+            'updated_at' => now()
         ],
         [
             'parent_id' => 1,
             'name' => 'Mobile Phone',
+            'created_at' => now(),
+            'updated_at' => now()
         ],
         [
             'parent_id' => 1,
             'name' => 'Tablet',
+            'created_at' => now(),
+            'updated_at' => now()
         ]
         ];
-        foreach($categories as $category){
-            Category::create($category);
-        }
+        Category::insert($categories);
+
     }
 }

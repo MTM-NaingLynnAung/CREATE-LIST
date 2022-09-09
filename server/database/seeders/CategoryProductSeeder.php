@@ -15,26 +15,26 @@ class CategoryProductSeeder extends Seeder
      */
     public function run()
     {
-        $combine = [
+        $data = [
+
             [
                 'product_id' => 1,
                 'category_id' => 1
             ],
             [
-                'product_id' => 1,
+                'product_id' => 2,
                 'category_id' => 2
             ],
             [
-                'product_id' => 2,
+                'product_id' => 3,
                 'category_id' => 3
             ],
             [
-                'product_id' => 2,
-                'category_id' => 3
+                'product_id' => 1,
+                'category_id' => 2
             ],
+
         ];
-        foreach($combine as $item){
-            CategoryProduct::create($item);
-        }
+        CategoryProduct::insert($data);
     }
 }
