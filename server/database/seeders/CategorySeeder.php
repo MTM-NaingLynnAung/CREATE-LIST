@@ -17,7 +17,7 @@ class CategorySeeder extends Seeder
     {
        $categories = [
         [
-            'parent_id' => null,
+            'parent_id' => 1,
             'name' => 'Electronics',
             'created_at' => now(),
             'updated_at' => now()

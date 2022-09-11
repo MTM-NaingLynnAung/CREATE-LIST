@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
         User::create([
             'name' => config('constant.name'),
             'email' => config('constant.email'),
-            'password' => bcrypt(config('constant.password'))
+            'password' => config('constant.password')
         ]);
     }
 }

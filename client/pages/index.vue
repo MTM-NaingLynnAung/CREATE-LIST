@@ -1,5 +1,8 @@
 <template>
-  <Tutorial />
+  <client-only>
+
+    <Product />
+  </client-only>
 </template>
 
 <script>

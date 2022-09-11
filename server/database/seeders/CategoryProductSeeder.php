@@ -16,6 +16,7 @@ class CategoryProductSeeder extends Seeder
     public function run()
     {
         $data = [
+
             [
                 'product_id' => 1,
                 'category_id' => 1
@@ -34,6 +35,6 @@ class CategoryProductSeeder extends Seeder
             ],
 
         ];
-        CategoryProduct::insert($data);    
+        CategoryProduct::insert($data);
     }
 }
