@@ -1,5 +1,8 @@
 <template>
-  <Product />
+  <client-only>
+
+    <Product />
+  </client-only>
 </template>
 
 <script>

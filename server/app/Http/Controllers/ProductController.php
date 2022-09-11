@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ProductExport;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\CategoryProduct;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProductController extends Controller
 {
@@ -46,5 +48,9 @@ class ProductController extends Controller
     {
         CategoryProduct::where('product_id', $product->id)->delete();
         return $product->delete();
+    }
+    public function export()
+    {
+        return Excel::download(new ProductExport, 'products.csv');
     }
 }

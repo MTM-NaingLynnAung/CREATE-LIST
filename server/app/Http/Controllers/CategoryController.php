@@ -13,7 +13,7 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::with(['products', 'children'])->get();
-        return CategoryResource::collection($categories);
+        return response()->json(CategoryResource::collection($categories));
     }
     public function store(Request $request)
     {

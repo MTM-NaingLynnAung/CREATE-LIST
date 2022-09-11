@@ -14,8 +14,10 @@ class CategoryResource extends JsonResource
      */
     public function toArray($request)
     {
+        $children = $this->whenLoaded('children');
         return [
-            'category' => ChildrenResource::collection($this->children)
+            'name' => $this->when(method_exists($children, 'isEmpty') && !$children->isEmpty(), $this->name),
+            'category' => $this->when(method_exists($children, 'isEmpty') && !$children->isEmpty(), ChildrenResource::collection($children))
         ];
     }
 }
