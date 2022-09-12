@@ -7,10 +7,14 @@
         <th>Product Name</th>
         <th>Product Price</th>
       </tr>
+     
       <tr v-for="product in products" :key="product.id">
-        <td>{{ product.category_name }}</td>
-        <td>{{ product.product_name }}</td>
-        <td>{{product.price}}</td>
+        <td>{{ product.name }}</td>
+        <td>
+          <div v-for="category in product" :key="category.id">
+            {{category}}
+          </div>
+        </td>
       </tr>
     </table>
   </div>
@@ -27,9 +31,9 @@ export default {
 
   },
   mounted(){
-    this.$axios.get('http://127.0.0.1:8000/api/products')
+    this.$axios.get('http://127.0.0.1:8000/api/category')
     .then(response => {
-      this.products = response.data
+      this.products = response.data.data
       console.log(this.products);
     } )
     .catch(error => console.log(error))
