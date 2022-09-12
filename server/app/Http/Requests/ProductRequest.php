@@ -24,8 +24,16 @@ class ProductRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'price' => 'required'
+            'name' => 'required|unique:products',
+            'description' => 'required',
+            'price' => 'required|integer',
+            'mainCategory' => 'required'
+        ];
+    }
+    public function messages()
+    {
+        return [
+            'mainCategory.required' => 'The category field is required.'
         ];
     }
 }

@@ -22,14 +22,23 @@ class ProductSeeder extends Seeder
             'description' => 'Product is for testing',
             'created_at' => now(),
             'updated_at' => now()
-        ],[
+        ],
+        [
             'name' => 'Product2',
             'price' => 2000,
             'description' => 'Product is for testing',
             'created_at' => now(),
             'updated_at' => now()
-        ],[
+        ],
+        [
             'name' => 'Product3',
+            'price' => 3000,
+            'description' => 'Product is for testing',
+            'created_at' => now(),
+            'updated_at' => now()
+        ],
+        [
+            'name' => 'Product4',
             'price' => 3000,
             'description' => 'Product is for testing',
             'created_at' => now(),

@@ -13,10 +13,26 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::with(['products', 'children'])->get();
-        return CategoryResource::collection($categories);
+        return response()->json(CategoryResource::collection($categories));
     }
     public function store(Request $request)
     {
+        info($request);
        
+       if(!$request->sub_name){
+        $category = new Category([
+            'name' => $request->name,
+           ]);
+           
+       }else{
+        $category = new Category([
+            'name' => $request->sub_name,
+            'parent_id' => 7
+        ]);
+       }
+       $category->save();
+    //    $subCat = Category::where('name', )
+
+       return $category;
     }
 }
