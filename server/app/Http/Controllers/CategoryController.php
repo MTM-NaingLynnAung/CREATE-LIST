@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
 use App\Models\Category;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use App\Http\Resources\CategoryResource;
+use App\Http\Requests\CategoryRequest;
+use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
@@ -17,22 +16,42 @@ class CategoryController extends Controller
     }
     public function store(Request $request)
     {
-        info($request);
-       
+    $isExit = Category::where('name', $request->name)->exists();
        if(!$request->sub_name){
-        $category = new Category([
-            'name' => $request->name,
-           ]);
-           
+            if(!$isExit){
+                $category = new Category([
+                    'name' => $request->name,
+                ]);
+            }else{
+                $category = Category::where('name', $request->name)->first();
+            }
        }else{
-        $category = new Category([
-            'name' => $request->sub_name,
-            'parent_id' => 7
-        ]);
+            $parent = Category::where('name', $request->name)->first();
+            $isExit = Category::where('name', $request->sub_name)->first();
+            if(!$isExit){
+                $category = new Category([
+                    'name' => $request->sub_name,
+                    'parent_id' => $parent->id,
+                ]);
+            }else{
+
+                $category = Category::where('name', $request->sub_name)->first();
+            }
        }
        $category->save();
-    //    $subCat = Category::where('name', )
-
        return $category;
+    }
+    public function update(Request $request, Category $category)
+    {
+        $isExit = Category::where('name', $request->sub_name)->exists();
+        if(!$isExit){
+            $category->name = $request->sub_name;
+            $category->update();
+        }
+       return $category;
+    }
+    public function destroy(Category $category)
+    {
+        return $category->delete();
     }
 }
