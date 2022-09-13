@@ -1,6 +1,11 @@
 <template>
   <div class="container mt-5">
     <NuxtLink to="/category/create" class="btn btn-primary">Create</NuxtLink>
+    <div class="float-right" @click="view">
+      <form class="d-flex" @submit.prevent = "view">
+        <input type="search" class="form-control" v-model="search" placeholder="Search ... ">
+      </form>
+    </div>
      <table class="table">
       <tr>
         <th>ID</th>
@@ -15,6 +20,12 @@
         </td>
       </tr>
     </table>
+    <b-pagination 
+      v-model="currentPage" 
+      :total-rows="rows" 
+      :per-page="perPage"
+      @input="paginate(currentPage)">
+  </b-pagination>
   </div>
 </template>
 
@@ -27,14 +38,30 @@ export default {
         id: '',
         name: '',
       },
+      search: '',
+      currentPage: null,
+      perPage: null,
+      rows: null,
     }
   },
   methods: {
-    view(){
-      this.$axios.get(`/category`)
-      .then(response => {
+    view(page = 1){
+      this.$axios.get(`/category?page=${page}&search=${this.search}`)
+        .then(response => {
+        console.log(page)
         this.categories = response.data.data
+        console.log(this.categories)
+          this.currentPage = response.data.current_page
+        console.log(this.currentPage)
+        this.rows = response.data.total
+        this.perPage = response.data.per_page
       })
+    },
+    paginate(page) {
+      this.$axios.get('/category?page=' + page)
+        .then(response => {
+          this.categories = response.data.data
+        })
     },
      edit(category) {
       this.category.id = category.id
