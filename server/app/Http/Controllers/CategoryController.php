@@ -3,52 +3,46 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use App\Http\Resources\CategoryResource;
-use App\Http\Requests\CategoryRequest;
 use Illuminate\Http\Request;
+use App\Exports\CategoryExport;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Requests\CategoryRequest;
+use App\Http\Resources\CategoryResource;
 
 class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::with(['products', 'children'])->get();
-        return response()->json(CategoryResource::collection($categories));
+        if(request('search')){
+            return Category::where('name', 'LIKE', '%'. request('search') .'%')->orderBy('id', 'desc')->paginate(2);
+        }
+       return Category::orderBy('id', 'desc')->paginate(5);
+    }
+    public function show(Category $category){
+        return $category;
     }
     public function store(Request $request)
     {
-    $isExit = Category::where('name', $request->name)->exists();
-       if(!$request->sub_name){
-            if(!$isExit){
-                $category = new Category([
-                    'name' => $request->name,
-                ]);
-            }else{
-                $category = Category::where('name', $request->name)->first();
-            }
-       }else{
-            $parent = Category::where('name', $request->name)->first();
-            $isExit = Category::where('name', $request->sub_name)->first();
-            if(!$isExit){
-                $category = new Category([
-                    'name' => $request->sub_name,
-                    'parent_id' => $parent->id,
-                ]);
-            }else{
-
-                $category = Category::where('name', $request->sub_name)->first();
-            }
-       }
-       $category->save();
-       return $category;
+        $request->validate([
+            'name' => 'required'
+        ]);
+        $category = new Category([
+            'name' => $request->name
+        ]);
+        $category->save();
+        return $category;
     }
     public function update(Request $request, Category $category)
     {
-        $isExit = Category::where('name', $request->sub_name)->exists();
-        if(!$isExit){
-            $category->name = $request->sub_name;
-            $category->update();
-        }
-       return $category;
+        $request->validate([
+            'name' => 'required'
+        ]);
+        $category->name = $request->name;
+        $category->update();
+        return $category;
+    }
+    public function export(){
+        return Excel::download(new CategoryExport, 'category.csv');
     }
     public function destroy(Category $category)
     {

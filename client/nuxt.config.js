@@ -51,4 +51,24 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
+  router: {
+    routes: [
+      {
+        name: 'index',
+        path: '/category',
+        component: 'pages/category/index.vue'
+      },
+      {
+        name: 'create',
+        path: '/category/create',
+        component: 'pages/category/create.vue'
+      },
+      {
+        name: 'edit',
+        path: '/category/edit/:id',
+        component: 'pages/category/edit.vue'
+      }
+    ]
+   
+  }
 }
