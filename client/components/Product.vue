@@ -33,8 +33,6 @@
     </b-modal>
 
 
-
-    <a :href="url" class="btn btn-dark ml-3 float-right" @click="download">Export</a>
     <b-button @click="create" variant="primary" class="float-right">Create</b-button>
     <b-modal v-model="show" @hidden="resetModal">
       <template #modal-header>
@@ -321,10 +319,7 @@ export default {
               .then(response => this.$nuxt.refresh())
           }
         })
-    },
-    download() {
-      this.url = process.env.baseURL + '/export';
-    },
+    }
   },
 
   async fetch() {

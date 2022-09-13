@@ -26,4 +26,3 @@ Route::apiResource('users', UserController::class);
 Route::apiResource('products', ProductController::class);
 Route::apiResource('category', CategoryController::class);
 Route::apiResource('image', ImageController::class);
-Route::get('export', [ProductController::class, 'export']);
