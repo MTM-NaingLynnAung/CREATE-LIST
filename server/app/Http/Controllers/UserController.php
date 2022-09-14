@@ -41,7 +41,7 @@ class UserController extends Controller
             ]);
         }
         $user = Auth::user();
-        return $request->session()->regenerate();
+        return $user;
         
     }
     public function logout(Request $request)

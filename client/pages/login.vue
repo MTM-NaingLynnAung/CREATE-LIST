@@ -44,8 +44,11 @@ export default {
           password: this.password
         }
        })
-     this.$router.push('/category')
+     this.$router.push('/')
     }
+  },
+  mounted() {
+    this.$axios.get('/sanctum/csrf-cookie');
   }
 }
 </script>
