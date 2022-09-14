@@ -36,12 +36,35 @@ export default {
     'bootstrap-vue/nuxt',
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '@nuxtjs/auth-next'
   ],
+  auth: {
+    strategies: {
+      'laravelSanctum': {
+        provider: 'laravel/sanctum',
+        url: process.env.BASE_URL,
+        endpoints: {
+          login: 
+          { 
+            url: '/login', method: 'post'
+          },
+          logout: 
+          {
+            method: 'get', url: 'logout'
+          },
+          
+        }
+      }
+    },
+    
+  },
  
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: process.env.BASE_URL
+    baseURL: process.env.BASE_URL,
+    credentials: true,
+    proxy: true,
   },
   env: {
     baseURL: process.env.BASE_URL
@@ -52,23 +75,27 @@ export default {
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
   router: {
-    routes: [
-      {
-        name: 'index',
-        path: '/category',
-        component: 'pages/category/index.vue'
-      },
-      {
-        name: 'create',
-        path: '/category/create',
-        component: 'pages/category/create.vue'
-      },
-      {
-        name: 'edit',
-        path: '/category/edit/:id',
-        component: 'pages/category/edit.vue'
-      }
-    ]
+    middleware: ['auth']
+  },
+  // router: {
+  //   routes: [
+  //     {
+  //       name: 'index',
+  //       path: '/category',
+  //       component: 'pages/category/index.vue'
+  //     },
+  //     {
+  //       name: 'create',
+  //       path: '/category/create',
+  //       component: 'pages/category/create.vue'
+  //     },
+  //     {
+  //       name: 'edit',
+  //       path: '/category/edit/:id',
+  //       component: 'pages/category/edit.vue'
+  //     },
+    
+  //   ]
    
-  }
+  // }
 }

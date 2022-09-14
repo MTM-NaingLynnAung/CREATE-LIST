@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 
 /*
@@ -15,9 +16,10 @@ use App\Http\Controllers\CategoryController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:sanctum')->group(function (){
+    Route::apiResource('category', CategoryController::class);
+    Route::apiResource('user', UserController::class);
 });
 
-Route::apiResource('category', CategoryController::class);
-Route::get('export', [CategoryController::class, 'export']);
+Route::post('register',[UserController::class, 'store']);
+Route::post('login', [UserController::class, 'login']);

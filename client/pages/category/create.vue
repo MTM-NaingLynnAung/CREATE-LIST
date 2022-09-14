@@ -1,16 +1,19 @@
 <template>
   <div class="container mt-5">
+    <h3>Create Category</h3>
     <form @submit.prevent="store()" class="w-25">
         <div class="form-group">
-          <label for="">Category : </label>
+          <label for="">Name : </label>
           <input type="text" v-model="category.name" class="form-control">
           <div v-if="errorMessage">
             <span class="text-danger" v-for="error in errors.name" :key="error">{{ error }}</span>
           </div>
-        <button class="btn btn-primary mt-3" type="submit">Create</button>
+        <div class="mt-3 d-flex justify-content-between">
+          <NuxtLink to="/category" class="btn btn-dark">Back</NuxtLink>
+          <button class="btn btn-primary" type="submit">Create</button>
+        </div>
       </div>
     </form>
-    <NuxtLink to="/category" class="btn btn-dark btn-sm">Back</NuxtLink>
   </div>
 </template>
 

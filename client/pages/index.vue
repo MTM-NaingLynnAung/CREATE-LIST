@@ -1,11 +1,16 @@
 <template>
-
+  
 </template>
 
 <script>
+
 export default {
-  created() {
-    this.$router.push('/category')
-  }
-  }
+  // mounted() {
+  //   this.$router.push('/login')
+  // }
+}
 </script>
+
+<style>
+
+</style>

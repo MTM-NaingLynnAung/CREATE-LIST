@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+
+Route::middleware('auth:sanctum')->group(function (){
+    Route::resource('category', CategoryController::class);
+    Route::resource('user', UserController::class);
 });
+Route::post('register',[UserController::class, 'store']);
+Route::post('login', [UserController::class, 'login']);

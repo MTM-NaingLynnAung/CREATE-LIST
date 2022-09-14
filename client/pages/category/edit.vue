@@ -1,17 +1,20 @@
 <template>
   <div class="container mt-5">
+    <h3>Edit Category</h3>
     <form @submit.prevent="update()" class="w-25">
 
         <div class="form-group">
-          <label>Category : </label>
+          <label>Name : </label>
           <input type="text" v-model="category.name" class="form-control" />
           <div v-if="errorMessage">
             <span class="text-danger" v-for="error in errors.name" :key="error">{{ error }}</span>
           </div>
         </div>
-       <button class="btn btn-primary mt-3 btn-sm" type="submit">Update</button>
+        <div class="mt-3 d-flex justify-content-between">
+          <NuxtLink to="/category" class="btn btn-dark">Back</NuxtLink>
+        <button class="btn btn-primary" type="submit">Update</button>
+        </div>
     </form>
-        <NuxtLink to="/category" class="btn btn-dark btn-sm mt-3">Back</NuxtLink>
   </div>
 </template>
 
