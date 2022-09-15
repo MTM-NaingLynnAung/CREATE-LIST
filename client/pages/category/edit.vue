@@ -20,6 +20,7 @@
 
 <script>
 export default {
+  middleware: 'auth',
   data(){
     return {
       category: {
@@ -32,7 +33,7 @@ export default {
   },
   methods: {
     update(){
-      this.$axios.put(`/category/${this.category.id}`, this.category)
+      this.$axios.put(`/api/category/${this.category.id}`, this.category)
       .then(response => {
         this.$router.push({ name: 'category' })
         this.errorMessage = false
@@ -45,7 +46,7 @@ export default {
   },
   mounted(){
     this.category.id = this.$route.params.id
-    this.$axios.get('/category/'+ this.category.id)
+    this.$axios.get('/api/category/'+ this.category.id)
     .then(response => {
       this.category = response.data
     })

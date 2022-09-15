@@ -36,6 +36,7 @@
 
 <script>
 export default {
+  middleware: 'auth',
   data(){
     return {
       categories: [],
@@ -51,7 +52,7 @@ export default {
   },
   methods: {
     view(page = 1){
-      this.$axios.get(`/category?page=${page}&search=${this.search}`)
+      this.$axios.get(`/api/category?page=${page}&search=${this.search}`)
         .then(response => {
           this.categories = response.data.data
           this.currentPage = response.data.current_page
@@ -73,7 +74,7 @@ export default {
       })
         .then(value => {
           if (value == true) {
-            this.$axios.delete('/category/' + id)
+            this.$axios.delete('/api/category/' + id)
               .then(response => {
                 this.view()
               })

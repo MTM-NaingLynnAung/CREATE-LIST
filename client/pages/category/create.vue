@@ -19,6 +19,7 @@
 
 <script>
 export default {
+  middleware: 'auth',
   data(){
     return {
       category: {
@@ -31,7 +32,7 @@ export default {
   },
   methods: {
      store() {
-      this.$axios.post('/category', this.category)
+      this.$axios.post('/api/category', this.category)
         .then(response => {
           this.errorMessage = false
           this.$router.push({name : 'category'})

@@ -42,6 +42,7 @@
 
 <script>
 export default {
+   auth: false,
   data(){
     return {
       user: {
@@ -56,12 +57,13 @@ export default {
   },
   methods: {
     register(){
-      this.$axios.post('/register', this.user)
+      this.$axios.post('/api/register', this.user)
       .then(response => {
         this.errorMessage = false
         this.$router.push('/login')
       })
       .catch(error => {
+        console.log(error.response.data)
         this.errors = error.response.data.errors
         console.log(this.errors)
         this.errorMessage = true

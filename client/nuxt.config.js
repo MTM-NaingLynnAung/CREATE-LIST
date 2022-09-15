@@ -21,6 +21,8 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [],
+  
+  
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -38,21 +40,50 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/auth-next'
   ],
+  // auth: {
+  //   redirect: {
+  //     login: '/login',
+  //     // logout: '/',
+  //     // callback: '/',
+  //     // home: '/'
+  //   },
+  //   strategies: {
+  //     laravelSanctum: {
+  //       provider: 'laravel/sanctum',
+  //       url: 'http://localhost:8000',
+  //       cookie: {
+  //         name: 'XSRF-TOKEN',
+  //       },
+  //       endpoints: {
+  //         csrf: {
+  //           url: '/sanctum/csrf-cookie'
+  //         },
+  //         login: { url: '/login', method: 'post' },
+  //         logout: { url: '/logout', method: 'post' },
+  //       }
+  //     }
+  //   }
+  // },
   auth: {
+    redirect: {
+          login: '/login',
+          // logout: '/',
+          // callback: '/',
+          // home: '/'
+        },
     strategies: {
-      'laravelSanctum': {
-        provider: 'laravel/sanctum',
-        url: process.env.BASE_URL,
+      local:{
+        user: {
+          property: 'data'
+        },
         endpoints: {
-          login: 
-          { 
-            url: '/login'
-          }
-          
+          login: {url: '/api/login', method: 'post'},
+          logout: {url: '/api/logout', method: 'post'},
+          user: {url: '/api/user', method: 'get'},
+
         }
       }
-    },
-    
+    }
   },
  
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -69,6 +100,10 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
+
+  router: {
+    middleware: ['auth']
+  }
 
   // router: {
   //   routes: [

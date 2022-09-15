@@ -10,7 +10,8 @@ import Nav from './partials/Nav.vue'
 export default {
   components: {
     Nav
-  }
+  },
+ 
 }
 </script>
 

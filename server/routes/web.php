@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,9 +15,18 @@ use App\Http\Controllers\CategoryController;
 */
 
 
-Route::middleware('auth:sanctum')->group(function (){
-    Route::resource('category', CategoryController::class);
-    Route::resource('user', UserController::class);
+// Route::middleware('auth:sanctum')->group(function (){
+//     Route::resource('category', CategoryController::class);
+//     Route::resource('user', UserController::class);
+// });
+
+Route::get('/', function(){
+  return view('welcome');
 });
-Route::post('register',[UserController::class, 'store']);
+
 Route::post('login', [UserController::class, 'login']);
+Route::post('logout', [UserController::class, 'logout']);
+Route::get('logout', [UserController::class, 'logout']);
+
+
+

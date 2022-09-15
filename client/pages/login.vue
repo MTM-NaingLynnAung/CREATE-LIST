@@ -7,16 +7,14 @@
       <div class="col-4">
         <div class="form-group">
           <label for="">Email : </label>
-          <input type="email" class="form-control" v-model="email">
-          <div v-if="errorMessage">
-            <span class="text-danger" v-for="error in errors.email" :key="error">{{ error }}</span>
-          </div>
+          <input type="email" class="form-control" v-model="user.email">
+         
         </div>
         <div class="form-group">
           <label for="">Password : </label>
-          <input type="password" class="form-control" v-model="password">
+          <input type="password" class="form-control" v-model="user.password">
           <div v-if="errorMessage">
-            <span class="text-danger" v-for="error in errors.password" :key="error">{{ error }}</span>
+            <span class="text-danger" >{{ errors }}</span>
           </div>
         </div>
         <button class="btn btn-primary mt-3" type="submit">Login</button>
@@ -28,27 +26,34 @@
 
 <script>
 export default {
+  auth: 'guest',
   data(){
     return {
-        email : '',
-        password: '',
-      errors: [],
+       user:{
+         email : '',
+          password: '',
+       },
+      errors: {},
       errorMessage: false
     }
   },
   methods: {
     async login(){
-      await this.$auth.loginWith('laravelSanctum', { 
-        data: {
-          email: this.email,
-          password: this.password
-        }
-       })
-     this.$router.push('/')
+      try{
+        await this.$auth.loginWith('local', { 
+        data: this.user })
+        console.log('user login')
+          this.$router.push('/')
+        this.errorMessage = false
+      }catch(error){
+        console.log(error.response.data)
+        this.errors = error.response.data.message
+        this.errorMessage = true
+      }
     }
   },
   mounted() {
-    this.$axios.get('/sanctum/csrf-cookie');
+    this.$axios.$get('/sanctum/csrf-cookie');
   }
 }
 </script>

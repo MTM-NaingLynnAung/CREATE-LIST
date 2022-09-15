@@ -27,21 +27,22 @@ class UserController extends Controller
     }
     public function login(Request $request)
     {
-        $request->validate([
-            'email' => 'required',
-            'password' => 'required'
-        ]);
+        // $request->validate([
+        //     'email' => 'required',
+        //     'password' => 'required'
+        // ]);
         $credentials = [
             'email' => $request->email,
             'password' => $request->password,
         ];
         if(!Auth::attempt($credentials)){
-            return response([
-                'message' => 'Invalid Credentials'
+            return response()->json([
+                'message' => 'Invalid credentials'
             ]);
         }
         $user = Auth::user();
-        return $user;
+        return $user->createToken($user->name)->plainTextToken;
+        
         
     }
     public function logout(Request $request)
