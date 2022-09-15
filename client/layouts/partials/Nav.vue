@@ -9,6 +9,7 @@
            {{ $auth.user.email }}
           </div>
           <nuxt-link to="/category" class="btn btn-sm btn-secondary mr-3">Category List</nuxt-link>
+          <nuxt-link to="/product" class="btn btn-sm btn-info mr-3">Product List</nuxt-link>
           <button class="btn btn-sm btn-outline-danger" @click="logout">Logout</button>
         </div>
         <div v-else>
