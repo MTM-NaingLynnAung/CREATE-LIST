@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\CategoryProduct;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -15,23 +16,19 @@ class ProductController extends Controller
     //     }
     //    $product =  Product::orderBy('id', 'desc')->paginate(2);
         // $category = Category::all();
-        // $product = Product::when(request('search'), function ($query) {
-        //     $query->where('name', 'like', '%' . request('search') . '%');
-        // })
-        // ->orderBy('id', 'desc')
-        // ->with('category')
-        // ->paginate(2);
-        // return [ 
-        // 'product' => $product,
-        // 'category' => $category
-        // ];
-        $product = Product::with('categories')->get();
+         $product = Product::when(request('search'), function ($query) {
+            $query->where('name', 'like', '%' . request('search') . '%');
+         })
+         ->orderBy('id', 'desc')
+         ->with('categories')
+         ->paginate(2);
+        //$product = Product::with('categories')->get();
         return $product;
         
     }
     public function show(Product $product)
     {
-        return $product;
+        return ["product" => $product , 'category' => $product->categories];
     }
     public function store(Request $request)
     {
@@ -60,11 +57,15 @@ class ProductController extends Controller
         $request->validate([
             'name' => 'required',
             'price' => 'required',
-            'category_id' => 'required',
+            'category' => 'required',
         ]);
         $product->name = $request->name;
         $product->price = $request->price;
-        $product->category_id = $request->category_id;
+        if ($request->category) {
+            CategoryProduct::where('product_id', $product->id)->delete();
+            $category = Category::whereIn('name', $request->category)->get();
+            $product->categories()->attach($category);
+        }
         $product->update();
         return $product;
     }

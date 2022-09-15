@@ -64,8 +64,7 @@ export default {
     view(page = 1){
       this.$axios.get(`/api/product?page=${page}&search=${this.search}`)
         .then(response => {
-          this.products = response.data
-          console.log(this.products)
+          this.products = response.data.data
           this.currentPage = response.data.current_page
           this.rows = response.data.total
           this.perPage = response.data.per_page

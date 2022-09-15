@@ -18,7 +18,7 @@
           <div class="form-group">
             <label for="">Category : </label>
             <select class="form-control" v-model="product.category" multiple>
-              <option selected :value="[]" >Choose Category</option>
+              <option selected :value="[]" disabled>Choose Category</option>
               <option :value="category.name" v-for="category in categories" :key="category.id">{{ category.name }}</option>
             </select>
             <div v-if="errorMessage">
@@ -63,9 +63,10 @@ export default {
         })
     },
     view(){
-      this.$axios.get('/api/product')
+      this.$axios.get('/api/category')
         .then(response => {
-          this.categories = response.data.category
+          console.log(response.data)
+          this.categories = response.data.data
         })
     },
   },

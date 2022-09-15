@@ -17,8 +17,9 @@
           </div>
           <div class="form-group">
             <label for="">Category : </label>
-            <select class="form-control" v-model="product.category_id">
-              <option :value="category.id" v-for="category in categories" :key="category.id">{{ category.name }}</option>
+            <select class="form-control" v-model="product.category" multiple>
+              <!--<option :value="category.name" v-for="category in product.categories" :key="category.id" selected>{{ category.name }}</option>-->
+                <option :value="item.name" v-for="item in categories" :key="item.id">{{ item.name }}</option>
             </select>
             <div v-if="errorMessage">
               <span class="text-danger" v-for="error in errors.category_id" :key="error">{{ error }}</span>
@@ -42,7 +43,7 @@ export default {
         id: '',
         name: '',
         price: '',
-        category: ''
+        category: []
       },
       categories: [],
       errorMessage: false,
@@ -62,10 +63,9 @@ export default {
         })
     },
     list(){
-      this.$axios.get('/api/product')
+      this.$axios.get('/api/category')
         .then(response => {
-          console.log(response.data)
-          this.categories = response.data.category
+          this.categories = response.data.data
         })
     }
   },
@@ -73,8 +73,8 @@ export default {
     this.list()
     this.product.id = this.$route.params.id
     this.$axios.get('/api/product/'+ this.product.id)
-    .then(response => {
-      this.product = response.data
+      .then(response => {
+      this.product = response.data.product
     })
   }
 }
