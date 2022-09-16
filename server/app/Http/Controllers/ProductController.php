@@ -11,18 +11,12 @@ class ProductController extends Controller
 {
     public function index()
     {
-    //     if(request('search')){
-    //         return Product::where('name', 'LIKE', '%'. request('search') .'%')->orderBy('id', 'desc')->paginate(2);
-    //     }
-    //    $product =  Product::orderBy('id', 'desc')->paginate(2);
-        // $category = Category::all();
-         $product = Product::when(request('search'), function ($query) {
+        $product = Product::when(request('search'), function ($query) {
             $query->where('name', 'like', '%' . request('search') . '%');
          })
          ->orderBy('id', 'desc')
          ->with('categories')
          ->paginate(2);
-        //$product = Product::with('categories')->get();
         return $product;
         
     }
@@ -38,8 +32,6 @@ class ProductController extends Controller
             'price' => 'required',
             'category' => 'required',
         ]);
-        // $category = Category::whereIn('name', $request->category)->get();
-        // info($category);
         $product = new Product([
             'name' => $request->name,
             'price' => $request->price,

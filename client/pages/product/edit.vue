@@ -18,8 +18,7 @@
           <div class="form-group">
             <label for="">Category : </label>
             <select class="form-control" v-model="product.category" multiple>
-              <!--<option :value="category.name" v-for="category in product.categories" :key="category.id" selected>{{ category.name }}</option>-->
-                <option :value="item.name" v-for="item in categories" :key="item.id">{{ item.name }}</option>
+              <option :value="category.name" v-for="category in categories" :key="category.id" selected>{{ category.name }}</option>
             </select>
             <div v-if="errorMessage">
               <span class="text-danger" v-for="error in errors.category_id" :key="error">{{ error }}</span>
@@ -75,6 +74,11 @@ export default {
     this.$axios.get('/api/product/'+ this.product.id)
       .then(response => {
       this.product = response.data.product
+      response.data.product.categories.forEach(category => {
+        this.product.category = [category.name]
+      });
+
+      console.log(this.product.category)
     })
   }
 }
