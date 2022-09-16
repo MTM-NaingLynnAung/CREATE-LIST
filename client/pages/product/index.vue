@@ -14,6 +14,7 @@
         <th>Name</th>
         <th>Price</th>
         <th>Category Name</th>
+        <th>Image</th>
         <th>Action</th>
       </tr>
       <tr v-for="product in products" :key="product.id">
@@ -22,9 +23,11 @@
         <td>{{ product.name }}</td>
         <td>{{ product.price }}</td>
         <td>
-          <span v-for="category in product.categories" :key="category.id">
-            {{ category.name }},
-          </span>
+          {{ product.category_name }}
+          
+        </td>
+        <td>
+          <img :src="imageUrl(product.image)" alt="" width="70" height="70">
         </td>
         <td>
           <NuxtLink :to="`/product/edit/${product.id}`" class="btn btn-info btn-sm">Edit</NuxtLink>
@@ -52,7 +55,8 @@ export default {
         id: '',
         name: '',
         price: '',
-        category: ''
+        category: '',
+        category_name: ''
       },
       search: '',
       currentPage: null,
@@ -65,10 +69,13 @@ export default {
       this.$axios.get(`/api/product?page=${page}&search=${this.search}`)
         .then(response => {
           this.products = response.data.data
-          this.currentPage = response.data.current_page
-          this.rows = response.data.total
-          this.perPage = response.data.per_page
+          this.currentPage = response.data.meta.current_page
+          this.rows = response.data.meta.total
+          this.perPage = response.data.meta.per_page
         })
+    },
+    imageUrl(image){
+      return `http://127.0.0.1:8000/storage/${image}`
     },
     destroy(id) {
       this.$bvModal.msgBoxConfirm('Are you Sure to Delete.', {

@@ -26,13 +26,14 @@ class ProductRequest extends FormRequest
         return [
             'name' => 'required',
             'price' => 'required',
-            'category_id' => 'required',
+            'category' => 'required',
+            'image' => 'required|mimes:jpg,png,jpeg|max:20000'
         ];
     }
     public function messages()
     {
         return [
-            'category_id.required' => 'The Category field is required'
+            'category.required' => 'The Category field is required'
         ];
     }
 }

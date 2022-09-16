@@ -24,6 +24,14 @@
               <span class="text-danger" v-for="error in errors.category_id" :key="error">{{ error }}</span>
             </div>
           </div>
+          <div class="form-group">
+            <p> {{ product.image }}</p>
+            <b-form-file v-model="product.image" class="mt-3 form-control" plain></b-form-file>
+            <b-img :src="imageUrl(product.image)" fluid alt="Fluid image"></b-img>
+             <div v-if="errorMessage">
+              <span class="text-danger" v-for="error in errors.image" :key="error">{{ error }}</span>
+            </div>
+          </div>
         <div class="mt-3 d-flex justify-content-between">
           <NuxtLink to="/product" class="btn btn-dark">Back</NuxtLink>
           <button class="btn btn-primary" type="submit">Update</button>
@@ -42,7 +50,8 @@ export default {
         id: '',
         name: '',
         price: '',
-        category: []
+        category: [],
+        image: null
       },
       categories: [],
       errorMessage: false,
@@ -51,7 +60,12 @@ export default {
   },
   methods: {
      update() {
-      this.$axios.put(`/api/product/${this.product.id}`, this.product)
+      const formData = new FormData();
+      formData.append('name', this.product.name)
+      formData.append('price', this.product.price)
+      formData.append('category', this.product.category)
+      formData.append('image', this.product.image)
+      this.$axios.post(`/api/product-update/${this.product.id}`, formData)
         .then(response => {
           this.errorMessage = false
           this.$router.push({name : 'product'})
@@ -60,6 +74,9 @@ export default {
           this.errors = error.response.data.errors
           this.errorMessage = true
         })
+    },
+    imageUrl(image){
+      return `http://127.0.0.1:8000/storage/${image}`
     },
     list(){
       this.$axios.get('/api/category')
@@ -73,12 +90,8 @@ export default {
     this.product.id = this.$route.params.id
     this.$axios.get('/api/product/'+ this.product.id)
       .then(response => {
-      this.product = response.data.product
-      response.data.product.categories.forEach(category => {
-        this.product.category = [category.name]
-      });
-
-      console.log(this.product.category)
+      this.product = response.data.data
+      this.product.category = this.product.category
     })
   }
 }

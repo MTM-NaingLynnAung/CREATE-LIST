@@ -35,3 +35,4 @@ Route::middleware('auth:sanctum')->group(function (){
 Route::post('register',[UserController::class, 'store']);
 Route::post('login', [UserController::class, 'login']);
 Route::apiResource('product', ProductController::class);
+Route::post('product-update/{id}', [ProductController::class, 'update']);
