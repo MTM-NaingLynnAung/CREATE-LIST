@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\RegisterRequest;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\Response;
 
 class UserController extends Controller
@@ -36,9 +37,10 @@ class UserController extends Controller
             'password' => $request->password,
         ];
         if(!Auth::attempt($credentials)){
-            return response()->json([
-                'message' => 'Invalid credentials'
-            ]);
+            //return response()->json([
+            //    'message' => 'Invalid credentials'
+            //]);
+            throw new AuthenticationException("Email or password is not valid");
         }
         $user = Auth::user();
         return $user->createToken($user->name)->plainTextToken;

@@ -43,10 +43,9 @@ export default {
         await this.$auth.loginWith('local', { 
         data: this.user })
         console.log('user login')
-          this.$router.push('/')
+          this.$router.push('/')````````
         this.errorMessage = false
       }catch(error){
-        console.log(error.response.data)
         this.errors = error.response.data.message
         this.errorMessage = true
       }
