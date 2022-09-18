@@ -25,9 +25,8 @@
             </div>
           </div>
           <div class="form-group">
-            <p> {{ product.image }}</p>
-            <b-form-file v-model="product.image" class="mt-3 form-control" plain></b-form-file>
-            <b-img :src="imageUrl(product.image)" fluid alt="Fluid image"></b-img>
+            <b-form-file v-model="product.image" class="mt-3 form-control" plain @change="imgPreview"></b-form-file>
+            <b-img :src="imagePreview" v-show="showImage" fluid alt="Fluid image"></b-img>
              <div v-if="errorMessage">
               <span class="text-danger" v-for="error in errors.image" :key="error">{{ error }}</span>
             </div>
@@ -53,6 +52,8 @@ export default {
         category: [],
         image: null
       },
+      imagePreview: null,
+      showImage: false,
       categories: [],
       errorMessage: false,
       errors: []
@@ -75,13 +76,23 @@ export default {
           this.errorMessage = true
         })
     },
-    imageUrl(image){
-      return `http://127.0.0.1:8000/storage/${image}`
+    imgPreview(e) {
+      this.product.image = e.target.files[0];
+      this.file = e.target.files[0];
+      console.log(this.product.image)
+      let reader = new FileReader();
+      reader.addEventListener('load', function () {
+        this.showImage = true
+        this.imagePreview = reader.result
+      }.bind(this), false)
+      if (this.product.image) {
+        reader.readAsDataURL(this.product.image)
+      }
     },
     list(){
-      this.$axios.get('/api/category')
+      this.$axios.get('/api/all')
         .then(response => {
-          this.categories = response.data.data
+          this.categories = response.data
         })
     }
   },
@@ -90,9 +101,11 @@ export default {
     this.product.id = this.$route.params.id
     this.$axios.get('/api/product/'+ this.product.id)
       .then(response => {
-      this.product = response.data.data
-      this.product.category = this.product.category
-    })
+        this.product = response.data.data
+        this.product.category = this.product.category
+        this.showImage = true
+        this.imagePreview = `http://127.0.0.1:8000/storage/${this.product.image}`
+      })
   }
 }
 </script>

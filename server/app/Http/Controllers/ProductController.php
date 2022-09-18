@@ -60,12 +60,15 @@ class ProductController extends Controller
             'name' => 'required',
             'price' => 'required',
             'category' => 'required',
-            'image' => 'mimes:jpg,png,jpeg|max:20000'
+            
         ]);
         Log::alert("message");
         Log::alert($request->all());
         $product = Product::find($request->id);
         if($request->hasFile('image')){
+            $request->validate([
+                'image' => 'mimes:jpg,png,jpeg|max:20000'
+            ]);
             $filePath = "storage/".$product->image;
             if(file_exists($filePath)){
                 unlink($filePath);
@@ -88,6 +91,10 @@ class ProductController extends Controller
     }
     public function destroy(Product $product)
     {
+        $filePath = "storage/" . $product->image;
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
         return $product->delete();
     }
 }

@@ -20,6 +20,9 @@ class CategoryController extends Controller
        $category =  Category::orderBy('id', 'desc')->paginate(2);
        return $category;
     }
+    public function all(){
+        return Category::all();
+    }
     public function show(Category $category){
         return $category;
     }

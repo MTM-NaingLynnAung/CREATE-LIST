@@ -93,9 +93,9 @@ export default {
         }
     },
     view(){
-      this.$axios.get('/api/category')
+      this.$axios.get('/api/all')
         .then(response => {
-          this.categories = response.data.data
+          console.log(this.categories)
         })
     },
     
