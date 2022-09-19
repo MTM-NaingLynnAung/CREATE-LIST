@@ -22,7 +22,7 @@
               <option :value="category.name" v-for="category in categories" :key="category.id">{{ category.name }}</option>
             </select>
             <div v-if="errorMessage">
-              <span class="text-danger" v-for="error in errors.category_id" :key="error">{{ error }}</span>
+              <span class="text-danger" v-for="error in errors.category" :key="error">{{ error }}</span>
             </div>
           </div>
           <div class="form-group">
@@ -44,7 +44,7 @@
 
 <script>
 export default {
-  // middleware: 'auth',
+  middleware: 'auth',
   data(){
     return {
       product: {
@@ -52,7 +52,7 @@ export default {
         name: '',
         price: '',
         category: [],
-        image: null
+        image: ''
       },
       imagePreview: null,
       showImage : false,
@@ -81,8 +81,6 @@ export default {
     },
     imgPreview(e){
        this.product.image = e.target.files[0];
-       this.file = e.target.files[0];
-       console.log(this.product.image)  
         let reader = new FileReader();
         reader.addEventListener('load', function(){
           this.showImage = true
@@ -95,7 +93,7 @@ export default {
     view(){
       this.$axios.get('/api/all')
         .then(response => {
-          console.log(this.categories)
+          this.categories = response.data
         })
     },
     

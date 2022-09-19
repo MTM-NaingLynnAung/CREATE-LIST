@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\CategoryProduct;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
@@ -35,10 +36,10 @@ class ProductController extends Controller
         $category = Category::whereIn('name', $request->category)->get();
        
         $request->validate([
-            'name' => 'required',
-            'price' => 'required',
-            'category' => 'required',
-            'image' => 'required|mimes:jpg,png,jpeg|max:20000'
+            'name' => ['required','unique:products', 'max:255'],
+            'price' => ['required','max:15', 'gt:0'],
+            'category' => ['required'],
+            'image' => ['required','mimes:jpg,png,jpeg','max:300']
         ]);
         $fileName = time().'.'.$request->image->extension();
         Storage::putFileAs('public/images', $request->image, $fileName);
@@ -56,18 +57,16 @@ class ProductController extends Controller
     }
     public function update(Request $request)
     {
+        $product = Product::find($request->id);
         $request->validate([
-            'name' => 'required',
-            'price' => 'required',
-            'category' => 'required',
+            'name' => ['required', Rule::unique('products')->ignore($product->id)],
+            'price' => ['required'],
+            'category' => ['required'],
             
         ]);
-        Log::alert("message");
-        Log::alert($request->all());
-        $product = Product::find($request->id);
         if($request->hasFile('image')){
             $request->validate([
-                'image' => 'mimes:jpg,png,jpeg|max:20000'
+                'image' => 'mimes:jpg,png,jpeg|max:300'
             ]);
             $filePath = "storage/".$product->image;
             if(file_exists($filePath)){

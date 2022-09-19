@@ -28,7 +28,7 @@
         </div>
         <div class="form-group">
           <label for="">Confirm Password : </label>
-          <input type="password" class="form-control" v-model="user.c_password">
+          <input type="password" class="form-control" onpaste="return false;"  v-model="user.c_password">
           <div v-if="errorMessage">
             <span class="text-danger" v-for="error in errors.c_password" :key="error">{{ error }}</span>
           </div>
