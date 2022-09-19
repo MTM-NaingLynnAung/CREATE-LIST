@@ -27,10 +27,17 @@
           </div>
           <div class="form-group">
             <!-- <input type="file" @change="imgPreview" multiple name="image[]"> -->
-            <b-form-file multiple v-model="product.image" class="mt-3 form-control" plain></b-form-file>
-             <!-- <b-img v-for="image in product.image" :key="image.id" :src="imagePreview" v-show="showImage" fluid alt="Fluid image"></b-img> -->
+            <b-form-file multiple v-model="product.image" class="mt-3 form-control" plain @change="imgPreview"></b-form-file>
+             <!--<b-img v-for="image in imagePreview" :key="image.id" :src="image" v-show="showImage" fluid alt="Fluid image"></b-img>-->
+              <b-container fluid class="mt-3">
+                <b-row>
+                  <b-col v-for="image in images" :key="image.id">
+                    <b-img :src="image.preview" v-show="showImage" fluid thumbnail alt="Fluid image"></b-img>
+                  </b-col>
+                </b-row>
+              </b-container>
             <div v-if="errorMessage">
-              <span class="text-danger" v-for="error in errors.image" :key="error">{{ error }}</span>
+              <span class="text-danger" v-for="error in errors.image" :key="error">{{ errors.image }}</span>
             </div>
           </div>
         <div class="mt-3 d-flex justify-content-between">
@@ -54,7 +61,7 @@ export default {
         category: [],
         image: []
       },
-      imagePreview: null,
+      images: [],
       showImage : false,
       categories: [],
       errorMessage: false,
@@ -68,34 +75,41 @@ export default {
       formData.append('price', this.product.price)
       formData.append('category', this.product.category)
       // formData.append('image[]', this.product.image)
-        this.product.image.forEach(element => {      
-          console.log(element) 
+        this.product.image.forEach(element => {
          formData.append('image[]', element);
       }); 
 
       this.$axios.post('/api/product', formData)
         .then(response => {
-          console.log(response.data)
           this.errorMessage = false
           this.$router.push({name : 'product'})
         })
         .catch(error => {
           this.errors = error.response.data.errors
+          console.log(this.errors.image)
           this.errorMessage = true
         })
     },
-    // imgPreview(e){
-    //    this.product.image = Array.from(e.target.files)
-    //    console.log(this.product.image)
-    //     let reader = new FileReader();
-    //     reader.addEventListener('load', function(){
-    //       this.showImage = true
-    //       this.imagePreview = reader.result
-    //     }.bind(this), false)
-    //     if(this.product.image){
-    //       reader.readAsDataURL(this.product.image)
-    //     }
-    // },
+    imageUrl(image) {
+      return `http://127.0.0.1:8000/storage/${image}`
+    },
+     imgPreview(e){
+        let files = e.target.files
+        for (let i = 0; i < files.length; i++) {
+          this.product.image = files[i];
+          let img = {
+            preview: null
+          };
+          let reader = new FileReader();
+         reader.addEventListener('load', function(){
+           this.showImage = true
+           img.preview = reader.result
+           this.images.push(img)
+         }.bind(this), false)
+          reader.readAsDataURL(this.product.image)
+        }
+       
+     },
     view(){
       this.$axios.get('/api/all')
         .then(response => {

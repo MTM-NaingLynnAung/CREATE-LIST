@@ -27,9 +27,14 @@
           <div class="form-group">
             <b-form-file v-model="product.image" class="mt-3 form-control" plain @change="imgPreview" multiple></b-form-file>
             <b-container fluid class="mt-3">
-              <b-row>
-                <b-col v-for="image in product.image" :key="image">
-                <b-img :src="imageUrl(image)" v-show="showImage" fluid thumbnail alt="Fluid image" ></b-img>
+              <b-row v-if="preview">
+                <b-col v-for="image in images" :key="image.id">
+                <b-img :src="image.preview" v-show="showImage" fluid thumbnail alt="Fluid image" ></b-img>
+                </b-col>
+              </b-row>
+              <b-row v-else>
+                <b-col v-for="image in product.image" :key="image.id">
+                  <b-img :src="imageUrl(image)" v-show="showImage" fluid thumbnail alt="Fluid image"></b-img>
                 </b-col>
               </b-row>
             </b-container>
@@ -58,7 +63,8 @@ export default {
         category: [],
         image: []
       },
-      imagePreview: null,
+      images: [],
+      preview: false,
       showImage: false,
       categories: [],
       errorMessage: false,
@@ -90,16 +96,22 @@ export default {
       return `http://127.0.0.1:8000/storage/${image}`
     },
     imgPreview(e) {
-      this.product.image = e.target.files[0];
-      console.log(this.product.image)
-      let reader = new FileReader();
-      reader.addEventListener('load', function () {
-        this.showImage = true
-        this.imagePreview = reader.result
-      }.bind(this), false)
-      if (this.product.image) {
+      this.preview = true
+      let files = e.target.files
+      for (let i = 0; i < files.length; i++) {
+        this.product.image = files[i];
+        let img = {
+          preview: null
+        };
+        let reader = new FileReader();
+        reader.addEventListener('load', function () {
+          this.showImage = true
+          img.preview = reader.result
+          this.images.push(img)
+        }.bind(this), false)
         reader.readAsDataURL(this.product.image)
       }
+
     },
     list(){
       this.$axios.get('/api/all')
@@ -116,9 +128,10 @@ export default {
         this.product = response.data.data
         this.product.category = this.product.category
         this.showImage = true
+        console.log(this.product.image)
         // this.product.image.forEach(image => {
-        //   this.imagePreview = `http://127.0.0.1:8000/storage/${image}`
-        //   console.log(this.imagePreview)
+        //   this.images = `http://127.0.0.1:8000/storage/${image}`
+        //   console.log(image)
         // });
         // // this.imagePreview = `http://127.0.0.1:8000/storage/${this.product.image}`
         // console.log(this.product)

@@ -42,7 +42,7 @@ class ProductController extends Controller
             'price' => ['required','max:15', 'gt:0'],
             'category' => ['required'],
             'image' => ['required'],
-            'image.*' => ['required','mimes:jpg,png,jpeg','max:300'],
+            'image.*' => ['mimes:jpg,png,jpeg','max:300'],
         ]);
         foreach ($request->file('image') as $image) {
             $fileName = rand(1000,10000).'.'.$image->extension();
