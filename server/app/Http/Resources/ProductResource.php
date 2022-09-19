@@ -18,7 +18,7 @@ class ProductResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'price' => $this->price,
-            'image' => $this->image,
+            'image' => explode('|',$this->image),
             'category_name' => $this->categories->implode('name', ', '), 
             'category' => CategoryResource::collection($this->categories),
         ];

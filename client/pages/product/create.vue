@@ -26,9 +26,9 @@
             </div>
           </div>
           <div class="form-group">
-            
-            <b-form-file v-model="product.image" class="mt-3 form-control" plain @change="imgPreview"></b-form-file>
-             <b-img :src="imagePreview" v-show="showImage" fluid alt="Fluid image"></b-img>
+            <!-- <input type="file" @change="imgPreview" multiple name="image[]"> -->
+            <b-form-file multiple v-model="product.image" class="mt-3 form-control" plain></b-form-file>
+             <!-- <b-img v-for="image in product.image" :key="image.id" :src="imagePreview" v-show="showImage" fluid alt="Fluid image"></b-img> -->
             <div v-if="errorMessage">
               <span class="text-danger" v-for="error in errors.image" :key="error">{{ error }}</span>
             </div>
@@ -52,7 +52,7 @@ export default {
         name: '',
         price: '',
         category: [],
-        image: ''
+        image: []
       },
       imagePreview: null,
       showImage : false,
@@ -67,10 +67,15 @@ export default {
       formData.append('name', this.product.name)
       formData.append('price', this.product.price)
       formData.append('category', this.product.category)
-      formData.append('image', this.product.image)
+      // formData.append('image[]', this.product.image)
+        this.product.image.forEach(element => {      
+          console.log(element) 
+         formData.append('image[]', element);
+      }); 
 
       this.$axios.post('/api/product', formData)
         .then(response => {
+          console.log(response.data)
           this.errorMessage = false
           this.$router.push({name : 'product'})
         })
@@ -79,17 +84,18 @@ export default {
           this.errorMessage = true
         })
     },
-    imgPreview(e){
-       this.product.image = e.target.files[0];
-        let reader = new FileReader();
-        reader.addEventListener('load', function(){
-          this.showImage = true
-          this.imagePreview = reader.result
-        }.bind(this), false)
-        if(this.product.image){
-          reader.readAsDataURL(this.product.image)
-        }
-    },
+    // imgPreview(e){
+    //    this.product.image = Array.from(e.target.files)
+    //    console.log(this.product.image)
+    //     let reader = new FileReader();
+    //     reader.addEventListener('load', function(){
+    //       this.showImage = true
+    //       this.imagePreview = reader.result
+    //     }.bind(this), false)
+    //     if(this.product.image){
+    //       reader.readAsDataURL(this.product.image)
+    //     }
+    // },
     view(){
       this.$axios.get('/api/all')
         .then(response => {

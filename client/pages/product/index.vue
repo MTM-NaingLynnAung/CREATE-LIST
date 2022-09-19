@@ -27,7 +27,7 @@
           
         </td>
         <td>
-          <img :src="imageUrl(product.image)" alt="" width="70" height="70">
+          <img :src="imageUrl(image)" alt="" width="70" height="70" v-for="image in product.image" :key="image">
         </td>
         <td>
           <NuxtLink :to="`/product/edit/${product.id}`" class="btn btn-info btn-sm">Edit</NuxtLink>
@@ -56,7 +56,8 @@ export default {
         name: '',
         price: '',
         category: '',
-        category_name: ''
+        category_name: '',
+        image: ''
       },
       search: '',
       currentPage: null,
@@ -69,6 +70,7 @@ export default {
       this.$axios.get(`/api/product?page=${page}&search=${this.search}`)
         .then(response => {
           this.products = response.data.data
+          console.log(this.products)
           this.currentPage = response.data.meta.current_page
           this.rows = response.data.meta.total
           this.perPage = response.data.meta.per_page

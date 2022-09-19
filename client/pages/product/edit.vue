@@ -25,8 +25,14 @@
             </div>
           </div>
           <div class="form-group">
-            <b-form-file v-model="product.image" class="mt-3 form-control" plain @change="imgPreview"></b-form-file>
-            <b-img :src="imagePreview" v-show="showImage" fluid alt="Fluid image"></b-img>
+            <b-form-file v-model="product.image" class="mt-3 form-control" plain @change="imgPreview" multiple></b-form-file>
+            <b-container fluid class="mt-3">
+              <b-row>
+                <b-col v-for="image in product.image" :key="image">
+                <b-img :src="imageUrl(image)" v-show="showImage" fluid thumbnail alt="Fluid image" ></b-img>
+                </b-col>
+              </b-row>
+            </b-container>
              <div v-if="errorMessage">
               <span class="text-danger" v-for="error in errors.image" :key="error">{{ error }}</span>
             </div>
@@ -50,7 +56,7 @@ export default {
         name: '',
         price: '',
         category: [],
-        image: null
+        image: []
       },
       imagePreview: null,
       showImage: false,
@@ -65,7 +71,11 @@ export default {
       formData.append('name', this.product.name)
       formData.append('price', this.product.price)
       formData.append('category', this.product.category)
-      formData.append('image', this.product.image)
+      // formData.append('image', this.product.image)
+      this.product.image.forEach(element => {      
+          console.log(element) 
+         formData.append('image[]', element);
+      }); 
       this.$axios.post(`/api/product-update/${this.product.id}`, formData)
         .then(response => {
           this.errorMessage = false
@@ -76,9 +86,11 @@ export default {
           this.errorMessage = true
         })
     },
+    imageUrl(image){
+      return `http://127.0.0.1:8000/storage/${image}`
+    },
     imgPreview(e) {
       this.product.image = e.target.files[0];
-      this.file = e.target.files[0];
       console.log(this.product.image)
       let reader = new FileReader();
       reader.addEventListener('load', function () {
@@ -104,7 +116,12 @@ export default {
         this.product = response.data.data
         this.product.category = this.product.category
         this.showImage = true
-        this.imagePreview = `http://127.0.0.1:8000/storage/${this.product.image}`
+        // this.product.image.forEach(image => {
+        //   this.imagePreview = `http://127.0.0.1:8000/storage/${image}`
+        //   console.log(this.imagePreview)
+        // });
+        // // this.imagePreview = `http://127.0.0.1:8000/storage/${this.product.image}`
+        // console.log(this.product)
       })
   }
 }
