@@ -27,7 +27,6 @@ class ProductController extends Controller
     }
     public function show(Product $product)
     {
-        // return ["product" => $product , 'category' => $product->categories];
         return new ProductResource($product);
     }
     public function store(Request $request)
@@ -41,8 +40,11 @@ class ProductController extends Controller
             'name' => ['required','unique:products', 'max:255'],
             'price' => ['required','max:15', 'gt:0'],
             'category' => ['required'],
-            'image' => ['required'],
+            'image' => ['required', 'max:5'],
             'image.*' => ['mimes:jpg,png,jpeg','max:300'],
+        ],[],
+        [
+            'image.*' => 'images'
         ]);
         foreach ($request->file('image') as $image) {
             $fileName = rand(1000,10000).'.'.$image->extension();
@@ -69,12 +71,15 @@ class ProductController extends Controller
         $request->validate([
             'name' => ['required', Rule::unique('products')->ignore($product->id)],
             'price' => ['required'],
-            'category' => ['required'],
-            
+            'category' => ['required'],   
+            'image' => ['max:5'],
         ]);
         if($request->hasFile('image')){
             $request->validate([
                 'image.*' => 'mimes:jpg,png,jpeg|max:300'
+            ],[],
+            [
+                'image.*' => 'images'
             ]);
 
             $images = explode("|", $product->image);

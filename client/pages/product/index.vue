@@ -36,6 +36,7 @@
       </tr>
     </table>
     <b-pagination 
+      v-show="rows > perPage"
       v-model="currentPage" 
       :total-rows="rows" 
       :per-page="perPage"

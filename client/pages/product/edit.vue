@@ -29,17 +29,17 @@
             <b-container fluid class="mt-3">
               <b-row v-if="preview">
                 <b-col v-for="image in images" :key="image.id">
-                <b-img :src="image.preview" v-show="showImage" fluid thumbnail alt="Fluid image" ></b-img>
+                <b-img :src="image.preview" v-show="showImage" alt="Fluid image" style="width:100px" class="mb-3"></b-img>
                 </b-col>
               </b-row>
               <b-row v-else>
                 <b-col v-for="image in product.image" :key="image.id">
-                  <b-img :src="imageUrl(image)" v-show="showImage" fluid thumbnail alt="Fluid image"></b-img>
+                  <b-img :src="imageUrl(image)" v-show="showImage" alt="Fluid image" style="width:100px" class="mb-3"></b-img>
                 </b-col>
               </b-row>
             </b-container>
-             <div v-if="errorMessage">
-              <span class="text-danger" v-for="error in errors.image" :key="error">{{ error }}</span>
+             <div v-if="imageErr != errors.price" v-show="errorMessage">
+              <span class="text-danger" v-for="error in imageErr" :key="error">{{ error }}</span>
             </div>
           </div>
         <div class="mt-3 d-flex justify-content-between">
@@ -68,7 +68,8 @@ export default {
       showImage: false,
       categories: [],
       errorMessage: false,
-      errors: []
+      errors: [],
+      imageErr: null
     }
   },
   methods: {
@@ -77,9 +78,7 @@ export default {
       formData.append('name', this.product.name)
       formData.append('price', this.product.price)
       formData.append('category', this.product.category)
-      // formData.append('image', this.product.image)
       this.product.image.forEach(element => {      
-          console.log(element) 
          formData.append('image[]', element);
       }); 
       this.$axios.post(`/api/product-update/${this.product.id}`, formData)
@@ -89,6 +88,7 @@ export default {
         })
         .catch(error => {
           this.errors = error.response.data.errors
+          this.imageErr = Object.values(this.errors).pop()
           this.errorMessage = true
         })
     },
@@ -110,6 +110,7 @@ export default {
           this.images.push(img)
         }.bind(this), false)
         reader.readAsDataURL(this.product.image)
+        this.images = []
       }
 
     },
@@ -128,13 +129,6 @@ export default {
         this.product = response.data.data
         this.product.category = this.product.category
         this.showImage = true
-        console.log(this.product.image)
-        // this.product.image.forEach(image => {
-        //   this.images = `http://127.0.0.1:8000/storage/${image}`
-        //   console.log(image)
-        // });
-        // // this.imagePreview = `http://127.0.0.1:8000/storage/${this.product.image}`
-        // console.log(this.product)
       })
   }
 }
