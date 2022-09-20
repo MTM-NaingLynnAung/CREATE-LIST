@@ -34,7 +34,7 @@
                   </b-col>
                 </b-row>
               </b-container>
-            <div v-if="imageErr != errors.category" v-show="errorMessage">
+            <div v-if="imageErr != errors.category && imageErr != errors.price && imageErr != errors.name" v-show="errorMessage">
               <span class="text-danger" v-for="error in imageErr" :key="error">{{ error }}</span>
             </div>
           </div>
